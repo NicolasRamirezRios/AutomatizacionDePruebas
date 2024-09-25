@@ -1,49 +1,46 @@
 package steps;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import static io.restassured.RestAssured.*;
-import io.restassured.specification.RequestSpecification;
 import org.jose4j.jwk.JsonWebKeySet;
-import org.jose4j.jws.JsonWebSignature;
+
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.jwt.consumer.JwtContext;
 import org.jose4j.lang.JoseException;
 import org.jose4j.keys.resolvers.JwksVerificationKeyResolver;
+import io.github.cdimascio.dotenv.Dotenv;
 
 
-import java.net.URL;
-import java.util.*;
 
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static io.restassured.RestAssured.given;
 
 public class TokenSteps {
+    private String clientId = "Nicolas";
+    private String clientSecret = "twL4vlrZ3MPVM3ANoY5EV0RWhsAOZyvQ";
+    private String tokenEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token";
+    private String introspectEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token/introspect";
+    private String jwksUri = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/certs";
+    private String userInfoEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/userinfo";
     private String token;
-    private String clientId;
-    private String clientSecret;
-    private Response response;
-    private String expiredToken;
-    private String validToken;
 
-    @Given("el cliente {string} con el secreto {string}")
-    public void elClienteConElSecreto(String clientId, String clientSecret) {
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
+    private Response response;
+    private String expiredToken = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ0WVF2WkFpQXZZT0txZG01TDF5ZDN3alg5bHpHeVZucy03VzZ2Z0M4QnFnIn0";
+
+    @Given("el cliente configurado")
+    public void elClienteConfigurado() {
+        assertNotNull(clientId);
+        assertNotNull(clientSecret);
     }
-    @Given("el cliente {string} con un secreto incorrecto")
-    public void elClienteConUnSecretoIncorrecto(String clientId) {
-        this.clientId = clientId;
+    @Given("el cliente configurado con un secreto incorrecto")
+    public void elClienteConfiguradoConUnSecretoIncorrecto() {
+        assertNotNull(clientId);
         this.clientSecret = "UqXFFuIzGFn3WkRtUH9cv3pU6f8d7dkc"; // Secreto incorrecto
     }
 
@@ -67,16 +64,12 @@ public class TokenSteps {
         assertNotNull("El token JWT no debe ser nulo", token);
     }
 
-    @Given("tengo un cliente con ID {string} y secreto {string}")
-    public void tengoUnClienteConIDYSecreto(String id, String secreto) {
-        this.clientId = id;
-        this.clientSecret = secreto;
+    @Given("un cliente configurado y un token expirado")
+    public void unClienteConfiguradoYUnTokenExpirado() {
+        assertNotNull(clientId);
+        assertNotNull(clientSecret);
     }
 
-    @And("tengo un token expirado {string}")
-    public void tengoUnTokenExpirado(String token) {
-        this.expiredToken = token;
-    }
 
     @Given("no tengo un token JWT")
     public void noTengoUnTokenJWT() {
@@ -84,21 +77,21 @@ public class TokenSteps {
         // Se puede usar esta función para inicializar cualquier dato si es necesario
     }
 
-    @When("hago una solicitud al endpoint seguro {string}")
-    public void hagoUnaSolicitudAlEndpointSeguro(String url) {
+    @When("hago una solicitud al endpoint seguro")
+    public void hagoUnaSolicitudAlEndpointSeguro() {
         // Realizamos una solicitud GET sin token JWT
         response = RestAssured.given()
-                .post(url);  // No se envía el header Authorization con token
+                .post(userInfoEndpoint);  // No se envía el header Authorization con token
     }
 
-    @When("se solicita un token en el endpoint {string}")
-    public void seSolicitaUnTokenEnElEndpoint(String endpoint) {
+    @When("se solicita un token")
+    public void seSolicitaUnToken() {
         response = given()
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("grant_type", "client_credentials")
                 .formParam("client_id", clientId)
                 .formParam("client_secret", clientSecret)
-                .post(endpoint);
+                .post(tokenEndpoint);
 
 
         // Imprimir la respuesta para depuración
@@ -111,7 +104,6 @@ public class TokenSteps {
     @When("se valida el token en el servidor usando la clave pública")
     public void seValidaElTokenEnElServidorUsandoLaClavePublica() {
         // Obtener las claves públicas del servidor Keycloak
-        String jwksUri = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/certs";
         Response certsResponse = given().get(jwksUri);
         assertEquals(200, certsResponse.getStatusCode());
 
@@ -139,15 +131,15 @@ public class TokenSteps {
         }
     }
 
-    @When("hago una solicitud de introspección al endpoint {string} con el token expirado")
-    public void hagoUnaSolicitudDeIntrospeccion(String url) {
+    @When("hago una solicitud de introspección con el token expirado")
+    public void hagoUnaSolicitudDeIntrospecciónConElTokenExpirado() {
         response = RestAssured.given()
                 .auth()
                 .preemptive()
                 .basic(clientId, clientSecret)
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("token", expiredToken)
-                .post(url);
+                .post(introspectEndpoint);
     }
 
     @Then("debería recibir un código de respuesta {int}")
@@ -197,8 +189,6 @@ public class TokenSteps {
     public void elCodigoDeRespuestaDebeSer(int expectedStatusCode) {
         assertEquals(expectedStatusCode, response.getStatusCode());
     }
-
-
 
 }
 
