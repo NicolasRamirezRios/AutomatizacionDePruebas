@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "access_token": {
+      "type": "string"
+    },
+    "expires_in": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "refresh_expires_in": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "token_type": {
+      "type": "string",
+      "enum": ["Bearer"]
+    },
+    "not-before-policy": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "scope": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "access_token",
+    "expires_in",
+    "refresh_expires_in",
+    "token_type",
+    "not-before-policy",
+    "scope"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "error": {
+      "type": "string",
+      "enum": ["unauthorized_client"]
+    },
+    "error_description": {
+      "type": "string",
+      "enum": ["Invalid client or Invalid client credentials"]
+    }
+  },
+  "required": [
+    "error",
+    "error_description"
+  ],
+  "additionalProperties": false
+}

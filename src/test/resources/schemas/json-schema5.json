@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "error": {
+      "type": "string",
+      "enum": ["invalid_request"]
+    },
+    "error_description": {
+      "type": "string",
+      "enum": ["Token not provided.", "Authentication failed."]
+    }
+  },
+  "required": [
+    "error",
+    "error_description"
+  ],
+  "additionalProperties": false
+}

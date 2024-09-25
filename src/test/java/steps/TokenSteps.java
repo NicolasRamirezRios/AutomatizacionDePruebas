@@ -1,11 +1,13 @@
 package steps;
 
+import com.github.javafaker.Faker;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import org.jose4j.jwk.JsonWebKeySet;
 
 import org.jose4j.jwt.consumer.InvalidJwtException;
@@ -17,13 +19,14 @@ import org.jose4j.keys.resolvers.JwksVerificationKeyResolver;
 import io.github.cdimascio.dotenv.Dotenv;
 
 
+import java.io.File;
 
 import static org.junit.Assert.*;
 import static io.restassured.RestAssured.given;
 
 public class TokenSteps {
     private String clientId = "Nicolas";
-    private String clientSecret = "twL4vlrZ3MPVM3ANoY5EV0RWhsAOZyvQ";
+    private String clientSecret = "UqXFFuIzGFn3WkRtUH9cv3pU6f8d7dkc";
     private String tokenEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token";
     private String introspectEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token/introspect";
     private String jwksUri = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/certs";
@@ -31,6 +34,7 @@ public class TokenSteps {
     private String token;
 
     private Response response;
+    private Faker faker = new Faker();
     private String expiredToken = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ0WVF2WkFpQXZZT0txZG01TDF5ZDN3alg5bHpHeVZucy03VzZ2Z0M4QnFnIn0";
 
     @Given("el cliente configurado")
@@ -38,10 +42,17 @@ public class TokenSteps {
         assertNotNull(clientId);
         assertNotNull(clientSecret);
     }
-    @Given("el cliente configurado con un secreto incorrecto")
+
+    @Given("el cliente aleatorio")
+    public void elClienteAleatorio() {
+        this.clientId = faker.internet().uuid(); // Genera un UUID aleatorio como clientId
+        this.clientSecret = faker.internet().password(); // Genera una contraseña aleatoria
+    }
+
+        @Given("el cliente configurado con un secreto incorrecto")
     public void elClienteConfiguradoConUnSecretoIncorrecto() {
         assertNotNull(clientId);
-        this.clientSecret = "UqXFFuIzGFn3WkRtUH9cv3pU6f8d7dkc"; // Secreto incorrecto
+        this.clientSecret = "twL4vlrZ3MPVM3ANoY5EV0RWhsAOZyvQ"; // Secreto incorrecto
     }
 
     @Given("un token JWT válido enviado del servidor")
@@ -49,7 +60,7 @@ public class TokenSteps {
         // Lógica para obtener un token JWT válido usando client_credentials
         String tokenEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token";
         String clientId = "Nicolas";
-        String clientSecret = "twL4vlrZ3MPVM3ANoY5EV0RWhsAOZyvQ";
+        String clientSecret = "UqXFFuIzGFn3WkRtUH9cv3pU6f8d7dkc";
 
         response = given()
                 .contentType("application/x-www-form-urlencoded")
@@ -81,7 +92,7 @@ public class TokenSteps {
     public void hagoUnaSolicitudAlEndpointSeguro() {
         // Realizamos una solicitud GET sin token JWT
         response = RestAssured.given()
-                .post(userInfoEndpoint);  // No se envía el header Authorization con token
+                .post(introspectEndpoint);  // No se envía el header Authorization con token
     }
 
     @When("se solicita un token")
@@ -184,10 +195,35 @@ public class TokenSteps {
     }
 
 
-
     @Then("el código de respuesta debe ser {int}")
     public void elCodigoDeRespuestaDebeSer(int expectedStatusCode) {
         assertEquals(expectedStatusCode, response.getStatusCode());
+    }
+
+    @Then("la respuesta debe cumplir con el esquema JSON en el escenario 1")
+    public void laRespuestaDebeCumplirConElEsquemaJSONEscenario1() {
+        File schema = new File("src/test/resources/schemas/json-schema1.json");
+        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(schema));
+    }
+    @Then("la respuesta debe cumplir con el esquema JSON en el escenario 2")
+    public void laRespuestaDebeCumplirConElEsquemaJSONEscenario2() {
+        File schema = new File("src/test/resources/schemas/json-schema2.json");
+        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(schema));
+    }
+    @Then("la respuesta debe cumplir con el esquema JSON en el escenario 3")
+    public void laRespuestaDebeCumplirConElEsquemaJSONEscenario3() {
+        File schema = new File("src/test/resources/schemas/json-schema3.json");
+        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(schema));
+    }
+    @Then("la respuesta debe cumplir con el esquema JSON en el escenario 4")
+    public void laRespuestaDebeCumplirConElEsquemaJSONEscenario4() {
+        File schema = new File("src/test/resources/schemas/json-schema4.json");
+        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(schema));
+    }
+    @Then("la respuesta debe cumplir con el esquema JSON en el escenario 5")
+    public void laRespuestaDebeCumplirConElEsquemaJSONEscenario5() {
+        File schema = new File("src/test/resources/schemas/json-schema5.json");
+        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(schema));
     }
 
 }
