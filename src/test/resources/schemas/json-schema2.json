@@ -4,7 +4,7 @@
   "properties": {
     "error": {
       "type": "string",
-      "enum": ["unauthorized_client"]
+      "enum": ["unauthorized_client", "invalid_client"]
     },
     "error_description": {
       "type": "string",

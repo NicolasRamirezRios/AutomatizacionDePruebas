@@ -37,4 +37,5 @@ Feature: Pruebas de autenticación y autorización con JWT en Keycloak
   Scenario: Solicitar un token JWT usando cliente aleatorio
     Given el cliente aleatorio
     When se solicita un token
+    Then la respuesta debe cumplir con el esquema JSON en el escenario 2
 
