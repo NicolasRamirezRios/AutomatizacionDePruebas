@@ -200,29 +200,30 @@ public class TokenSteps {
         assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
-    @Then("la respuesta debe cumplir con el esquema JSON en el escenario 1")
-    public void laRespuestaDebeCumplirConElEsquemaJSONEscenario1() {
-        File schema = new File("src/test/resources/schemas/json-schema1.json");
-        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(schema));
-    }
-    @Then("la respuesta debe cumplir con el esquema JSON en el escenario 2")
-    public void laRespuestaDebeCumplirConElEsquemaJSONEscenario2() {
-        File schema = new File("src/test/resources/schemas/json-schema2.json");
-        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(schema));
-    }
-    @Then("la respuesta debe cumplir con el esquema JSON en el escenario 3")
-    public void laRespuestaDebeCumplirConElEsquemaJSONEscenario3() {
-        File schema = new File("src/test/resources/schemas/json-schema3.json");
-        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(schema));
-    }
-    @Then("la respuesta debe cumplir con el esquema JSON en el escenario 4")
-    public void laRespuestaDebeCumplirConElEsquemaJSONEscenario4() {
-        File schema = new File("src/test/resources/schemas/json-schema4.json");
-        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(schema));
-    }
-    @Then("la respuesta debe cumplir con el esquema JSON en el escenario 5")
-    public void laRespuestaDebeCumplirConElEsquemaJSONEscenario5() {
-        File schema = new File("src/test/resources/schemas/json-schema5.json");
+    @Then("la respuesta debe cumplir con el esquema JSON en {string}")
+    public void laRespuestaDebeCumplirConElEsquemaJSON(String escenario) {
+        File schema;
+
+        switch (escenario) {
+            case "Solicitar token":
+                schema = new File("src/test/resources/schemas/json-schema1.json");
+                break;
+            case "Secreto incorrecto":
+                schema = new File("src/test/resources/schemas/json-schema2.json");
+                break;
+            case "Validar token":
+                schema = new File("src/test/resources/schemas/json-schema3.json");
+                break;
+            case "Token expirado":
+                schema = new File("src/test/resources/schemas/json-schema4.json");
+                break;
+            case "Sin token":
+                schema = new File("src/test/resources/schemas/json-schema5.json");
+                break;
+            default:
+                throw new IllegalArgumentException("Escenario no reconocido: " + escenario);
+        }
+
         response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(schema));
     }
 
