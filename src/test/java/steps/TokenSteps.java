@@ -26,7 +26,7 @@ import static io.restassured.RestAssured.given;
 
 public class TokenSteps {
     private String clientId = "Nicolas";
-    private String clientSecret = "UqXFFuIzGFn3WkRtUH9cv3pU6f8d7dkc";
+    private String clientSecret = "twL4vlrZ3MPVM3ANoY5EV0RWhsAOZyvQ";
     private String tokenEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token";
     private String introspectEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token/introspect";
     private String jwksUri = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/certs";
@@ -52,7 +52,7 @@ public class TokenSteps {
         @Given("el cliente configurado con un secreto incorrecto")
     public void elClienteConfiguradoConUnSecretoIncorrecto() {
         assertNotNull(clientId);
-        this.clientSecret = "twL4vlrZ3MPVM3ANoY5EV0RWhsAOZyvQ"; // Secreto incorrecto
+        this.clientSecret = "UqXFFuIzGFn3WkRtUH9cv3pU6f8d7dkc"; // Secreto incorrecto
     }
 
     @Given("un token JWT válido enviado del servidor")
@@ -60,7 +60,7 @@ public class TokenSteps {
         // Lógica para obtener un token JWT válido usando client_credentials
         String tokenEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token";
         String clientId = "Nicolas";
-        String clientSecret = "UqXFFuIzGFn3WkRtUH9cv3pU6f8d7dkc";
+        String clientSecret = "twL4vlrZ3MPVM3ANoY5EV0RWhsAOZyvQ";
 
         response = given()
                 .contentType("application/x-www-form-urlencoded")
