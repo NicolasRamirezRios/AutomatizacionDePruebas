@@ -27,10 +27,10 @@ import static io.restassured.RestAssured.given;
 public class TokenSteps {
     private String clientId = "Nicolas";
     private String clientSecret = "YHAyVXfH5orrViGXz5d6kWiVOCNTBkpi";
-    private String tokenEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token";
-    private String introspectEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token/introspect";
-    private String jwksUri = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/certs";
-    private String userInfoEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/userinfo";
+    private String tokenEndpoint = "http://keycloak:8080/realms/Realm_Prueba/protocol/openid-connect/token";
+    private String introspectEndpoint = "http://keycloak:8080/realms/Realm_Prueba/protocol/openid-connect/token/introspect";
+    private String jwksUri = "http://keycloak:8080/realms/Realm_Prueba/protocol/openid-connect/certs";
+    private String userInfoEndpoint = "http://keycloak:8080/realms/Realm_Prueba/protocol/openid-connect/userinfo";
     private String token;
 
     private Response response;
@@ -58,7 +58,7 @@ public class TokenSteps {
     @Given("un token JWT válido enviado del servidor")
     public void unTokenJWTValidoEnviadoDelServidor() {
         // Lógica para obtener un token JWT válido usando client_credentials
-        String tokenEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token";
+        String tokenEndpoint = "http://keycloak:8080/realms/Realm_Prueba/protocol/openid-connect/token";
         String clientId = "Nicolas";
         String clientSecret = "YHAyVXfH5orrViGXz5d6kWiVOCNTBkpi";
 
@@ -128,7 +128,7 @@ public class TokenSteps {
             // Configurar el consumidor de JWT para validar el token con la clave pública
             JwtConsumer jwtConsumer = new JwtConsumerBuilder()
                     .setRequireExpirationTime() // El token debe tener tiempo de expiración
-                    .setExpectedIssuer("http://localhost:8080/realms/Realm_Prueba") // Verificar el issuer
+                    .setExpectedIssuer("http://keycloak:8080/realms/Realm_Prueba") // Verificar el issuer
                     .setExpectedAudience("account") // Añadir audiencia esperada aquí
                     .setVerificationKeyResolver(keyResolver) // Resolver la clave pública usando JWK
                     .build();
