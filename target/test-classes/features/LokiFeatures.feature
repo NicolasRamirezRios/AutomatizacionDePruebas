@@ -1,11 +1,26 @@
-Feature: Gestión de logs en Loki a través de su API
+Feature: Interactuar con Loki
 
-Scenario: Buscar logs en Loki
-Given Loki está corriendo
-When busco logs que contengan la cadena "error"
-Then debería ver logs devueltos que contengan "error"
+  Scenario: Consultar el estado de Loki
+    Given Loki está corriendo
+    When solicito las métricas de Loki
+    Then debería recibir las métricas correctamente
+    And el código de estado debe ser 200
 
-Scenario: Enviar una nueva entrada de log a Loki
-Given Loki está corriendo
-When envío una entrada de log con el mensaje "Nueva entrada de log para pruebas"
-Then la entrada de log debería estar disponible en Loki
+  Scenario: Verificar la configuración actual de Loki
+    Given Loki está corriendo
+    When verifico la configuración actual del sistema
+    Then la respuesta debe incluir la configuración actual del sistema
+    And el código de estado debe ser 200
+
+  Scenario: Enviar y buscar logs en Loki
+    Given Loki está corriendo
+    When envío un log de prueba con la cadena "success"
+    And busco logs que contengan la cadena "success"
+    Then debería ver logs devueltos que contengan "success"
+
+  Scenario: Preparar a Loki para un cierre
+    Given Loki está corriendo
+    When envío una solicitud para preparar a Loki para el cierre
+    Then Loki debería estar preparado para el cierre sin pérdida de datos
+    And el código de estado debe ser 204
+
