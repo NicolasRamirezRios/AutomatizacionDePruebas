@@ -26,7 +26,7 @@ import static io.restassured.RestAssured.given;
 
 public class TokenSteps {
     private String clientId = "Nicolas";
-    private String clientSecret = "6CvhNQWSCkWR7PAtBxseNrQveljVC4JG";
+    private String clientSecret = "laSO1IhFqZn6bBhF3Xo85wdGikSzgXek";
     private String tokenEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token";
     private String introspectEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token/introspect";
     private String jwksUri = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/certs";
@@ -60,7 +60,7 @@ public class TokenSteps {
         // Lógica para obtener un token JWT válido usando client_credentials
         String tokenEndpoint = "http://localhost:8080/realms/Realm_Prueba/protocol/openid-connect/token";
         String clientId = "Nicolas";
-        String clientSecret = "6CvhNQWSCkWR7PAtBxseNrQveljVC4JG";
+        String clientSecret = "laSO1IhFqZn6bBhF3Xo85wdGikSzgXek";
 
         response = given()
                 .contentType("application/x-www-form-urlencoded")
