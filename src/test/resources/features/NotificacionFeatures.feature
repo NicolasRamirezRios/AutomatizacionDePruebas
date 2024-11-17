@@ -1,7 +1,7 @@
 Feature: Pruebas al servicio notificación
 
   Scenario: Envío correcto de una notificación
-    Given un destinatario de notificación "nicolasrr2k04@gmail.com"
+    Given un destinatario de notificación "alejandro.sanchezc1@uqvirtual.edu.co"
     And un mensaje de notificación "Hola, este es un mensaje de prueba"
     And un canal de notificación "email"
     When envío la notificación
