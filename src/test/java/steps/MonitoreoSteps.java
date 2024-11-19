@@ -19,7 +19,7 @@ public class MonitoreoSteps {
 
     @Given("el servicio de Prometheus está activo")
     public void el_servicio_de_Prometheus_está_activo_en() {
-        prometheusBaseUrl = "http://localhost:9090";
+        prometheusBaseUrl = "http://prometheus:9090";
     }
 
     @When("hago una solicitud GET al endpoint runtimeinfo")

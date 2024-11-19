@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class ApiGatewaySteps {
 
-    private String apiGatewayBaseUrl = "http://localhost:1111"; // API Gateway
+    private String apiGatewayBaseUrl = "http://kong:1111"; // API Gateway
     private Response response;
     private String accessToken;
 

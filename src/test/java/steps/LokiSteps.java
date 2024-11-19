@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class LokiSteps {
 
-    private static final String lokiBaseUrl = "http://localhost:3100"; // Variable global para la URL de Loki
+    private static final String lokiBaseUrl = "http://loki:3100"; // Variable global para la URL de Loki
     private Response response;
     private String logsJson;
     private Map<String, String> etiquetas;

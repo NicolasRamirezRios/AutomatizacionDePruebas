@@ -35,7 +35,7 @@ public class LogCentralizadoSteps {
         // Generar un token JWT válido
         String nombre = "usuarioPrueba";
         // Realizamos la petición exacta a la API
-        RestAssured.baseURI = "http://localhost:1111"; // Base URI
+        RestAssured.baseURI = "http://kong:1111"; // Base URI
 
         RequestSpecification request = given();
         apiResponse = request

@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class AuthServiceSteps {
 
-    private String authServiceBaseUrl = "http://localhost:8004"; // URL base del servicio de autenticación
+    private String authServiceBaseUrl = "http://go-auth-service:8004"; // URL base del servicio de autenticación
     private Response response;
 
     @Given("el servicio de autenticación está activo")

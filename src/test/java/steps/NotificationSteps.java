@@ -18,7 +18,7 @@ public class NotificationSteps {
     @Given("un destinatario de notificación {string}")
     public void aNotificationRecipient(String recipient) {
         destinatario = recipient;
-        RestAssured.baseURI = "http://localhost:9070/notifications";
+        RestAssured.baseURI = "http://notification-service:9070/notifications";
     }
 
     @Given("un mensaje de notificación {string}")
