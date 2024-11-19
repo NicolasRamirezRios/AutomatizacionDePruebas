@@ -29,40 +29,18 @@ public class LogCentralizadoSteps {
     private Response apiResponse;
     private Response lokiResponse;
 
-    // Método para generar un token JWT válido
-    private static String generarJWTValido(String nombre) {
-        long EXPIRATION_TIME_MILLISECONDS = 1000 * 60 * 60; // 1 hora
-        String SECRET_KEY = "es un secretoo";
-        String ISSUER = "ingesis.uniquindio.edu.co";
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
-            Date expirationDate = new Date(System.currentTimeMillis() + EXPIRATION_TIME_MILLISECONDS);
-            return JWT.create()
-                    .withIssuer(ISSUER)
-                    .withExpiresAt(expirationDate)
-                    .withSubject(nombre)
-                    .sign(algorithm);
-        } catch (JWTCreationException exception) {
-            return "";
-        }
-    }
 
     @Given("un usuario realiza una petición GET a la API")
     public void un_usuario_realiza_una_peticion_GET_a_la_API() {
         // Generar un token JWT válido
         String nombre = "usuarioPrueba";
-        String jwtToken = generarJWTValido(nombre);
-
         // Realizamos la petición exacta a la API
-        RestAssured.baseURI = "http://localhost:8000"; // Base URI
+        RestAssured.baseURI = "http://localhost:1111"; // Base URI
 
-        RequestSpecification request = given()
-                .header("Authorization", "Bearer " + jwtToken);  // Añadir el token JWT al header de Authorization
-
+        RequestSpecification request = given();
         apiResponse = request
-
                 .when()
-                .get("/?saludo&nombre=usuarioPrueba")  // Exactamente la petición especificada
+                .get("/consultar-perfil/petro")  // Exactamente la petición especificada
                 .then()
                 .statusCode(200) // Verificamos que la respuesta sea exitosa (código 200)
                 .extract().response();
@@ -78,7 +56,7 @@ public class LogCentralizadoSteps {
 
         lokiResponse = RestAssured
                 .given()
-                .queryParam("query", "{job=\"kafka-logs\"} |= \"" + "INFO" + "\"")
+                .queryParam("query", "{container=\"dockerfolder-profile-service-1\"} |= \"" + "INFO" + "\"")
                 .when()
                 .get(baseURI + "/loki/api/v1/query");
     }
